@@ -1,0 +1,51 @@
+generating until 10000 valid targets (seed 0, stopping margin 5 mm, probe margin 10 mm)
+
+{
+  "valid_targets_requested": 10000,
+  "positions_drawn": 1816,
+  "targets_drawn": 10896,
+  "targets_unreachable": 724,
+  "candidate_configs": 78824,
+  "valid_configs_at_default": 54440,
+  "valid_targets_actual": 10002,
+  "mean_modes_at_default": 5.443,
+  "multimodal_frac": 1.0,
+  "directions": [
+    "down",
+    "up",
+    "front",
+    "back",
+    "left",
+    "right"
+  ],
+  "seed": 0,
+  "probe_margin": 0.01,
+  "default_margin": 0.005,
+  "shell_r": [
+    0.3,
+    0.6
+  ],
+  "shell_z": [
+    0.65,
+    1.4
+  ],
+  "rotation": "6d_first_two_columns",
+  "seconds": 59.6
+}
+
+valid targets by direction:
+  down       1816 targets drawn      1813 valid  ( 99.8%)
+  up         1816 targets drawn      1791 valid  ( 98.6%)
+  front      1816 targets drawn      1241 valid  ( 68.3%)
+  back       1816 targets drawn      1525 valid  ( 84.0%)
+  left       1816 targets drawn      1816 valid  (100.0%)
+  right      1816 targets drawn      1816 valid  (100.0%)
+
+modes retained vs margin (re-thresholded, no regeneration):
+    0.0 mm  configs    58364  mean modes 5.82  multimodal 100.0%
+    2.0 mm  configs    56324  mean modes 5.63  multimodal 100.0%
+    5.0 mm  configs    54440  mean modes 5.44  multimodal 100.0%
+    8.0 mm  configs    53160  mean modes 5.32  multimodal 100.0%
+   10.0 mm  configs    52404  mean modes 5.25  multimodal 100.0%
+
+wrote data/configs_10000.h5

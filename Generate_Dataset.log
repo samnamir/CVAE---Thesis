@@ -1,0 +1,72 @@
+generating until 1000000 valid targets (seed 0, stopping margin 5 mm, probe margin 10 mm)
+  valid     45893/1000000  targets drawn     50004  configs    361744     174 valid/s  eta  91.2 min
+  valid     91593/1000000  targets drawn    100002  configs    721824     173 valid/s  eta  87.7 min
+  valid    137382/1000000  targets drawn    150000  configs   1082940     174 valid/s  eta  82.4 min
+  valid    183159/1000000  targets drawn    200004  configs   1443756     171 valid/s  eta  79.6 min
+  valid    228927/1000000  targets drawn    250002  configs   1804600     170 valid/s  eta  75.8 min
+  valid    274744/1000000  targets drawn    300000  configs   2165712     168 valid/s  eta  71.9 min
+  valid    320585/1000000  targets drawn    350004  configs   2526948     167 valid/s  eta  67.8 min
+  valid    366312/1000000  targets drawn    400002  configs   2887960     166 valid/s  eta  63.8 min
+  valid    412102/1000000  targets drawn    450000  configs   3248528     165 valid/s  eta  59.4 min
+  valid    457920/1000000  targets drawn    500004  configs   3609656     161 valid/s  eta  56.2 min
+  valid    503718/1000000  targets drawn    550002  configs   3970608     158 valid/s  eta  52.4 min
+  valid    549518/1000000  targets drawn    600000  configs   4331412     152 valid/s  eta  49.2 min
+  valid    595279/1000000  targets drawn    650004  configs   4691980     147 valid/s  eta  45.8 min
+  valid    640951/1000000  targets drawn    700002  configs   5051956     143 valid/s  eta  41.8 min
+  valid    686637/1000000  targets drawn    750000  configs   5411964     140 valid/s  eta  37.4 min
+  valid    732381/1000000  targets drawn    800004  configs   5771944     137 valid/s  eta  32.6 min
+  valid    778133/1000000  targets drawn    850002  configs   6132448     134 valid/s  eta  27.5 min
+  valid    823881/1000000  targets drawn    900000  configs   6493440     133 valid/s  eta  22.1 min
+  valid    869634/1000000  targets drawn    950004  configs   6853980     131 valid/s  eta  16.5 min
+  valid    915456/1000000  targets drawn   1000002  configs   7214964     130 valid/s  eta  10.8 min
+  valid    961229/1000000  targets drawn   1050000  configs   7575548     129 valid/s  eta   5.0 min
+
+{
+  "valid_targets_requested": 1000000,
+  "positions_drawn": 182069,
+  "targets_drawn": 1092414,
+  "targets_unreachable": 75057,
+  "candidate_configs": 7881216,
+  "valid_configs_at_default": 5420018,
+  "valid_targets_actual": 1000003,
+  "mean_modes_at_default": 5.42,
+  "multimodal_frac": 1.0,
+  "directions": [
+    "down",
+    "up",
+    "front",
+    "back",
+    "left",
+    "right"
+  ],
+  "seed": 0,
+  "probe_margin": 0.01,
+  "default_margin": 0.005,
+  "shell_r": [
+    0.3,
+    0.6
+  ],
+  "shell_z": [
+    0.65,
+    1.4
+  ],
+  "rotation": "6d_first_two_columns",
+  "seconds": 7839.3
+}
+
+valid targets by direction:
+  down     182069 targets drawn    181144 valid  ( 99.5%)
+  up       182069 targets drawn    179652 valid  ( 98.7%)
+  front    182069 targets drawn    125104 valid  ( 68.7%)
+  back     182069 targets drawn    149965 valid  ( 82.4%)
+  left     182069 targets drawn    182069 valid  (100.0%)
+  right    182069 targets drawn    182069 valid  (100.0%)
+
+modes retained vs margin (re-thresholded, no regeneration):
+    0.0 mm  configs  5805488  mean modes 5.80  multimodal 100.0%
+    2.0 mm  configs  5605582  mean modes 5.60  multimodal 100.0%
+    5.0 mm  configs  5420018  mean modes 5.42  multimodal 100.0%
+    8.0 mm  configs  5291302  mean modes 5.30  multimodal 100.0%
+   10.0 mm  configs  5218407  mean modes 5.23  multimodal 100.0%
+
+wrote data/configs.h5
