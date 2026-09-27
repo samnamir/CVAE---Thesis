@@ -11,8 +11,7 @@ margin.
     python Generate_Dataset.py --valid-targets 1000000 --out data/configs.h5
     cond, q, tid = load("data/configs.h5", margin=0.005, dedup_eps=0.10)
 
-RECORD NOW, DECIDE LATER. Generation costs hours; dropping a column costs a
-slice. So this keeps everything cheap to record and expensive to reproduce:
+RECORD NOW, DECIDE LATER. 
 
   * unreachable targets   -- IK found nothing. Useless for training the CVAE,
                              but they are the reachability statistic, and the
@@ -32,11 +31,6 @@ are one rotation but look maximally different to an encoder -- and Euler angles
 wrap. Either injects variance the CVAE can absorb into the latent, corrupting
 the mode structure being measured. rot6d_inv rebuilds R by Gram-Schmidt.
 
-SPLITS ARE BY TARGET, NEVER BY ROW. A target with six modes makes six rows
-sharing one condition. Split rows and some modes land in train, the rest in
-val -- so mode coverage gets scored on targets whose modes were memorised.
-That inflates exactly the number this thesis reports.
-
 Terminology (used consistently across every file in this pipeline)
 -----------------------------------------------------------------
     target            an EE pose: the 4x4 world pose of the TCP (the pinch
@@ -55,10 +49,9 @@ import json
 import time
 from pathlib import Path
 
+import Filter_Config as F
 import h5py
 import numpy as np
-
-import Filter_Config as F
 from Analytic_IK import UR5eKinematics
 from Environment_Arm_Only import build_model
 

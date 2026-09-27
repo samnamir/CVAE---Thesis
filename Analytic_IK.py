@@ -2,35 +2,7 @@
 Analytic_IK.py
 ==============
 Closed-form FK/IK for the UR5e, calibrated against the compiled MuJoCo model.
-
-Orientation is free. No task convention is baked in here: a target is a full
-4x4 world pose of the TCP, and `ik_tcp` returns every candidate config that
-reaches it (up to 8: shoulder left/right x wrist flip x elbow up/down).
-
-Frames
-------
-    T_world_dhbase   model base frame rotated 180 deg about z; the DH chain
-                     starts here, so the model's own base quat is respected
-                     rather than assumed to be identity.
-    T_flange_tcp     constant flange -> pinch-site offset (the gripper).
-
-Link lengths are MEASURED from the compiled model, never taken from published
-DH tables -- the mesh geometry disagrees with the datasheet by up to ~0.7 mm,
-which is far above the 1e-6 tolerance the solver is held to.
-
-Build targets with `pose(p, R)`; `random_rotation(rng)` gives a uniform R.
-
-Terminology (used consistently across every file in this pipeline)
------------------------------------------------------------------
-    target            an EE pose: the 4x4 world pose of the TCP (the pinch
-                      site between the fingers). What the CVAE conditions on.
-    candidate config  a 6-vector of joint angles returned by IK for a target,
-                      before any collision filtering.
-    valid config      a candidate config that survives the collision filter.
-    mode              a distinct valid config for one target. Same object as a
-                      valid config; the word is used only when COUNTING the
-                      diversity of valid configs for a target, which is
-                      the quantity this thesis reports.
+          the quantity this thesis reports.
 """
 
 import mujoco
@@ -184,22 +156,22 @@ class UR5eKinematics:
         return self.fk_flange(q) @ self.T_flange_tcp
 
     # ---------------- inverse ----------------
-    def ik_flange(self, T_world_flange):
+    def ik_flange(self, T_world_flange, slots = False):
         """Every candidate config for a world FLANGE pose, wrapped to [-pi, pi)."""
         T = self.T_dhbase_world @ np.asarray(T_world_flange, dtype=float)
         d4, d6, a2, a3 = self.d4, self.d6, self.a2, self.a3
         px, py = T[0, 3], T[1, 3]
-        sols = []
+        sols = [None] * 8
 
         # theta1 -- the joint-5 origin sits at constant offset d4 in frame 1
         P5 = T @ np.array([0.0, 0.0, -d6, 1.0])
         R = np.hypot(P5[0], P5[1])
         if R < abs(d4) - 1e-12:
-            return sols  # inside the shoulder cylinder: unreachable
+            return sols if slots else []  # inside the shoulder cylinder: unreachable
         phi = np.arctan2(P5[1], P5[0])
         asr = np.arcsin(np.clip(d4 / R, -1.0, 1.0))
 
-        for t1 in (phi + asr, phi + np.pi - asr):
+        for i1, t1 in enumerate((phi + asr, phi + np.pi - asr)): 
             s1, c1 = np.sin(t1), np.cos(t1)
             A1 = dh(t1, self._d[0], self._a[0], self._al[0])
 
@@ -209,7 +181,7 @@ class UR5eKinematics:
                 continue
             ac5 = np.arccos(np.clip(arg, -1.0, 1.0))
 
-            for t5 in (ac5, -ac5):
+            for i5, t5 in enumerate((ac5, -ac5)):       
                 s5 = np.sin(t5)
                 # theta6 -- undefined at the wrist singularity, pin it to 0
                 if abs(s5) < 1e-8:
@@ -232,7 +204,7 @@ class UR5eKinematics:
                     continue
                 ac3 = np.arccos(np.clip(c3, -1.0, 1.0))
 
-                for t3 in (ac3, -ac3):
+                for i3, t3 in enumerate((ac3, -ac3)):
                     t2 = np.arctan2(-p13[1], -p13[0]) - np.arcsin(
                         np.clip(a3 * np.sin(t3) / L, -1.0, 1.0)
                     )
@@ -240,12 +212,12 @@ class UR5eKinematics:
                     A3 = dh(t3, self._d[2], self._a[2], self._al[2])
                     T34 = np.linalg.inv(A2 @ A3) @ T14
                     t4 = np.arctan2(T34[1, 0], T34[0, 0])
-                    sols.append(wrap_to_pi([t1, t2, t3, t4, t5, t6]))
-        return sols
+                    sols[4 * i1 + 2 * i5 + i3] = wrap_to_pi([t1, t2, t3, t4, t5, t6])
+        return sols if slots else [s for s in sols if s is not None]
 
-    def ik_tcp(self, T_world_tcp):
+    def ik_tcp(self, T_world_tcp, slots=False):
         """Every candidate config reaching the target (a world TCP pose)."""
-        return self.ik_flange(np.asarray(T_world_tcp, dtype=float) @ self.T_tcp_flange)
+        return self.ik_flange(np.asarray(T_world_tcp, dtype=float) @ self.T_tcp_flange, slots)
 
     # ---------------- selection ----------------
     def within_limits(self, q, margin=0.0):

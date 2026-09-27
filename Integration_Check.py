@@ -27,11 +27,10 @@ Exit code is non-zero if any check fails, so this can gate generation.
 
 import sys
 
-import mujoco
-import numpy as np
-
 import Environment_Arm_Only as env
 import Filter_Config as F
+import mujoco
+import numpy as np
 from Analytic_IK import UR5eKinematics, pose, random_rotation
 
 POS_TOL = 1e-6      # m, replayed TCP position

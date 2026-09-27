@@ -3,11 +3,6 @@ Environment_Arm_Only.py
 =======================
 Minimal UR5e (+ Robotiq 2F-85) workcell for the CVAE config-generation work.
 
-This is a stripped-down descendant of the original Enviroment.py. The table and
-the cube are gone. What is left is the smallest scene that still supports the
-one thing the project now needs: given a target pose, decide whether a joint
-configuration is valid (joint limits + collision-free).
-
 Scene layout
 ------------
     floor      plane at z = 0
